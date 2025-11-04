@@ -1,0 +1,1012 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI ASSISTANT — All in one hand</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg-dark:#071026;--bg-dark-2:#07162a;--card:#0b1220;--accent1:#7c3aed;--accent2:#06b6d4;--muted:#94a3b8;--glass: rgba(255,255,255,0.04);--radius:14px}
+    .light{--bg:#ffffff;--card:#ffffff;--muted:#606675;--text:#091124}
+    *{box-sizing:border-box;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg-dark) 0%,var(--bg-dark-2) 60%);color:#e6eef8;transition:background .35s,color .35s}
+    .light-mode html, .light-mode body{background:var(--bg);color:var(--text)}
+    .app{display:grid;grid-template-columns:260px 1fr;min-height:100vh;gap:28px;padding:28px}
+    aside{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));border-radius:var(--radius);padding:20px;box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+    .logo{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+    .badge{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;position:relative}
+    nav a{display:flex;gap:12px;align-items:center;padding:10px;border-radius:10px;color:var(--muted);text-decoration:none;margin-bottom:6px;cursor:pointer}
+    nav a.active, nav a:hover{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015));color:#fff}
+    .small{font-size:12px;color:var(--muted)}
+    main{padding:18px;border-radius:var(--radius);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:0 10px 40px rgba(2,6,23,0.6)}
+    .grid{display:grid;grid-template-columns:1fr 420px;gap:18px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:14px}
+    .light-mode .card{background:#fff;color:var(--text)}
+    h1,h2,h3{margin:0 0 8px 0}
+    h1.big{font-size:20px;letter-spacing:0.2px}
+    .muted{color:var(--muted);font-size:13px}
+    table{width:100%;border-collapse:collapse}
+    table th, table td{padding:8px;text-align:left;border-bottom:1px dashed rgba(255,255,255,0.03);font-size:13px}
+    .form-row{display:flex;gap:10px;margin-top:8px}
+    input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit}
+    button{background:linear-gradient(90deg,var(--accent1),var(--accent2));border:none;color:white;padding:10px 14px;border-radius:10px;cursor:pointer}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);padding:8px 10px}
+    footer{margin-top:18px;color:var(--muted);font-size:13px}
+    .modal-backdrop{position:fixed;inset:0;background:linear-gradient(0deg, rgba(2,6,23,0.6), rgba(2,6,23,0.8));display:flex;align-items:center;justify-content:center;z-index:999}
+    .modal{width:720px;background:linear-gradient(180deg,#071423,#071a30);padding:20px;border-radius:12px;display:flex;gap:18px}
+    .modal .left{flex:1;padding:12px}
+    .modal .right{flex:1;padding:12px;border-left:1px dashed rgba(255,255,255,0.03)}
+    .socials{display:flex;gap:8px}
+    .blink-highlight{animation:blink 900ms ease-in-out}
+    @keyframes blink{0%{box-shadow:0 0 0 0 rgba(124,58,237,0.9)}50%{box-shadow:0 0 18px 6px rgba(124,58,237,0.85)}100%{box-shadow:0 0 0 0 rgba(124,58,237,0)}}
+    .reminder-modal{position:fixed;left:50%;top:18%;transform:translateX(-50%);background:var(--card);padding:18px;border-radius:12px;box-shadow:0 20px 60px rgba(2,6,23,0.7);z-index:1200;width:420px}
+    .reminder-modal h3{margin:0 0 8px 0}
+    .profile-photo{width:44px;height:44px;border-radius:50%;object-fit:cover;cursor:pointer}
+    .profile-dropdown{position:relative}
+    .profile-menu{position:absolute;right:0;top:56px;background:var(--card);padding:10px;border-radius:10px;box-shadow:0 12px 40px rgba(2,6,23,0.6);display:none;z-index:1200}
+    .profile-menu.show{display:block}
+    .creator-card{display:flex;gap:12px;align-items:center;padding:12px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent)}
+    .creator-photo{width:72px;height:72px;border-radius:10px;object-fit:cover}
+    .accent{background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    /* New UI additions */
+    .tabs{display:flex;gap:8px;margin-top:12px}
+    .tab{padding:8px 12px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.03);color:var(--muted);cursor:pointer}
+    .tab.active{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015));color:#fff}
+    .calendar {display:flex;flex-direction:column;gap:12px}
+    .month-head{display:flex;justify-content:space-between;align-items:center}
+    .month-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+    .day{padding:10px;border-radius:8px;background:rgba(255,255,255,0.01);min-height:80px;position:relative;border:1px solid rgba(255,255,255,0.01);cursor:pointer}
+    .day .dateNum{position:absolute;top:8px;right:10px;font-size:11px;color:var(--muted)}
+    .event-pill{display:block;font-size:12px;padding:6px;border-radius:8px;margin-top:24px;background:linear-gradient(90deg,var(--accent2),var(--accent1));color:#fff;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .mini {font-size:12px;color:var(--muted)}
+    .fitness-stats{display:flex;gap:12px;align-items:center}
+    .progress{height:12px;border-radius:8px;background:rgba(255,255,255,0.03);overflow:hidden}
+    .progress > i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,var(--accent1),var(--accent2));width:0%}
+    .mood-grid{display:flex;gap:8px;flex-wrap:wrap}
+    .mood-btn{padding:12px;border-radius:10px;background:rgba(255,255,255,0.02);cursor:pointer;border:1px solid rgba(255,255,255,0.01)}
+    .note-card{padding:12px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);min-height:70px}
+    .planner-timeline{display:flex;flex-direction:column;gap:8px}
+    .timeline-item{display:flex;justify-content:space-between;gap:8px;padding:8px;border-radius:10px;background:rgba(255,255,255,0.01);align-items:center}
+    /* Light theme redesign (pastel minimal) */
+    .light-mode .card{
+      background:linear-gradient(180deg, #ffffff, #f7fbff);
+      color:var(--text);
+      border:1px solid rgba(6,22,38,0.04);
+      box-shadow: 0 6px 18px rgba(17,24,39,0.04);
+    }
+    .light-mode .badge{
+      background:linear-gradient(135deg,#ffd7e0,#e0f7ff);
+      color:#091124;
+      box-shadow: 0 4px 18px rgba(12,18,35,0.04) inset;
+    }
+    .light-mode body, .light-mode html{background:linear-gradient(180deg,#fbfdff,#f3f8ff)}
+    .light-mode .tab{border:1px solid rgba(6,22,38,0.04); background:transparent; color:var(--muted);}
+    .light-mode .tab.active{background:linear-gradient(90deg,#f6f9ff,#fff); color:#091124}
+    .motivation{padding:12px;border-radius:10px;background:linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); min-height:84px}
+    @media(max-width:980px){.app{grid-template-columns:1fr;padding:16px}.grid{grid-template-columns:1fr}.modal{width:95%;flex-direction:column}.modal .right{border-left:none;border-top:1px dashed rgba(255,255,255,0.03)}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <div class="logo">
+      <div class="badge" id="clockBadge"><canvas id="clockCanvas" width="44" height="44" style="display:block"></canvas></div>
+      <div>
+        <h1 class="big">AI ASSISTANT</h1>
+        <div class="small">All in one hand — Professional</div>
+      </div>
+    </div>
+    <nav id="sidebarNav">
+      <a data-target="dashboard" class="active">🏠 Dashboard</a>
+      <a data-target="tasks">⏰ Tasks & Reminders</a>
+      <a data-target="water">💧 Water Tracker</a>
+      <a data-target="meds">💊 Medication Reminder</a>
+      <a data-target="calc">🧮 Calculator</a>
+      <a data-target="tutorials">📚 Tutorials</a>
+      <a data-target="creators">🎨 Creators</a>
+      <a data-target="profile">👤 Profile</a>
+      <a data-target="settings">⚙️ Settings</a>
+
+      <!-- NEW sections (kept styling consistent) -->
+      <a data-target="calendar">📅 Calendar & Events</a>
+      <a data-target="fitness">💪 Fitness Tracker</a>
+      <a data-target="mood">🧘 Mood Journal</a>
+      <a data-target="notes">📓 Notes</a>
+      <a data-target="planner">💼 Daily Planner</a>
+    </nav>
+    <footer>
+      Version 1.4 · Secure · Offline-friendly
+    </footer>
+  </aside>
+
+  <main>
+    <header class="top" style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <h2 id="pageTitle">Dashboard</h2>
+        <div class="muted">A single place for reminders, health & quick tools</div>
+
+        <!-- Tabs for the 5 major new sections (Calendar, Fitness, Mood, Notes, Planner) -->
+        <div class="tabs" id="mainTabs" aria-hidden="false" style="display:flex">
+          <button class="tab" data-tab="calendar">📅 Calendar</button>
+          <button class="tab" data-tab="fitness">💪 Fitness</button>
+          <button class="tab" data-tab="mood">🧘 Mood</button>
+          <button class="tab" data-tab="notes">📓 Notes</button>
+          <button class="tab" data-tab="planner">💼 Planner</button>
+        </div>
+
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="profile-dropdown">
+          <img id="topProfilePhoto" class="profile-photo" src="" alt="profile" />
+          <div id="profileMenu" class="profile-menu">
+            <div style="font-weight:600;margin-bottom:6px">Account</div>
+            <div class="muted" id="menuUser">Guest</div>
+            <div style="margin-top:8px;display:flex;gap:8px"><button id="openAccountBtn" class="btn-ghost">Open Account</button><button id="logoutBtn" class="btn-ghost">Logout</button></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="grid">
+      <div id="mainColumn">
+
+        <!-- DASHBOARD (rearranged to include motivation panel) -->
+        <div class="card" id="dashboardSection">
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="flex:1">
+              <h2>Today Overview</h2>
+              <div class="muted" id="overviewInfo">No reminders for now — create tasks, water goals, or meds and we'll remind you loudly when the time comes.</div>
+              <div style="display:flex;gap:10px;margin-top:12px">
+                <div style="flex:1" class="card">
+                  <h3 style="margin:0">Next Reminder</h3>
+                  <div id="nextReminder" class="muted">—</div>
+                </div>
+                <div style="width:170px" class="card">
+                  <h3 style="margin:0">Water today</h3>
+                  <div id="waterSummary" class="muted">—</div>
+                </div>
+              </div>
+              <div style="margin-top:12px;display:flex;gap:10px">
+                <div style="flex:1" class="card">
+                  <h3>Quick Actions</h3>
+                  <div style="display:flex;gap:8px;margin-top:8px"><button id="showAddTask">Add Task</button><button id="showWaterGoal">Add Water Goal</button><button id="showAddMed">Add Medication</button></div>
+                </div>
+                <div style="width:260px" class="card">
+                  <h3>Calculator</h3>
+                  <div class="muted">Mini quick calc</div>
+                  <div class="form-row" style="margin-top:8px"><input id="quickCalcInput" placeholder="e.g. 12+5*3"/><button id="quickCalcBtn">=</button></div>
+                  <div id="quickCalcResult" style="margin-top:8px;font-weight:600"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Motivational panel -->
+            <div style="width:320px">
+              <div class="motivation card">
+                <h3 style="margin:0 0 8px 0">✨ Motivation</h3>
+                <div id="motivationText" style="font-weight:700;font-size:15px">Stay focused — your assistant is ready.</div>
+                <div class="muted" style="margin-top:8px" id="motivationAuthor">—</div>
+                <div style="margin-top:8px;display:flex;gap:8px;justify-content:flex-end"><button id="nextMotivation" class="btn-ghost">Next</button></div>
+              </div>
+              <div style="margin-top:12px" class="card">
+                <h4 style="margin:0 0 8px 0" class="accent">Quick Tools</h4>
+                <div class="muted">Shortcuts for people on the move.</div>
+                <div style="margin-top:8px;display:flex;flex-direction:column;gap:8px">
+                  <button id="openCalc">Open Calculator Panel</button>
+                  <button id="openTutorials">Open Tutorials Page</button>
+                  <button id="openCalendarQuick" class="btn-ghost">Open Calendar</button>
+                  <button id="openNotesQuick" class="btn-ghost">Open Notes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TASKS (original) -->
+        <div class="card" id="tasksSection" style="margin-top:14px">
+          <h2>Tasks & Reminders</h2>
+          <div class="muted">Create reminders that trigger in real time. Reminders persist locally.</div>
+          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+            <input id="taskTitle" placeholder="Task title" style="flex:2" />
+            <input id="taskWhen" type="datetime-local" style="flex:1.2" />
+            <select id="taskType" style="width:140px"><option>Reminder</option><option>One-time</option></select>
+            <button id="addTaskBtn">Add Task</button>
+          </div>
+          <table style="margin-top:12px">
+            <thead><tr><th>Title</th><th>When</th><th>Type</th><th></th></tr></thead>
+            <tbody id="tasksTable"></tbody>
+          </table>
+        </div>
+
+        <!-- WATER (original) -->
+        <div class="card" id="waterSection" style="margin-top:14px">
+          <h2>Water Tracker</h2>
+          <div class="muted">Set litres/day and we'll generate a clear schedule and reminders for the day.</div>
+          <div style="margin-top:10px"><label class="small">Daily target (litres)</label><div style="display:flex;gap:8px;margin-top:6px"><input id="dailyLitres" type="number" placeholder="e.g. 2.5" step="0.1"/><button id="setWaterGoal">Set Goal</button></div></div>
+          <div id="waterPlan" style="margin-top:12px"></div>
+        </div>
+
+        <!-- MEDS (original) -->
+        <div class="card" id="medsSection" style="margin-top:14px">
+          <h2>Medication Reminder</h2>
+          <div class="muted">Add medication entries — they show in a neat table and will remind you.</div>
+          <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+            <input id="medName" placeholder="Medicine name"/>
+            <input id="medDose" placeholder="Dose (e.g. 1 tablet)"/>
+            <input id="medDateTime" type="datetime-local"/>
+            <button id="addMedBtn">Add</button>
+          </div>
+          <table style="margin-top:12px"><thead><tr><th>Name</th><th>Dose</th><th>When</th><th></th></tr></thead><tbody id="medTable"></tbody></table>
+        </div>
+
+        <!-- CALC (original) -->
+        <div class="card" id="calcSection" style="margin-top:14px;display:none">
+          <h2>Calculator & Tutorial</h2>
+          <div class="muted">Full calculator with a short tutorial beside it.</div>
+          <div style="display:flex;gap:12px;margin-top:10px;align-items:flex-start">
+            <div style="flex:1">
+              <textarea id="fullExpr" placeholder="Type expression using Math, e.g. Math.pow(2,8)" style="width:100%;height:120px;padding:8px;border-radius:8px;background:transparent;color:inherit"></textarea>
+              <div style="display:flex;gap:8px;margin-top:8px"><button id="evalBtn">Evaluate</button><button id="helpCalc" class="btn-ghost">Help</button></div>
+              <div id="fullRes" style="margin-top:8px;font-weight:600"></div>
+            </div>
+            <div style="width:260px;padding:10px;border-radius:10px">
+              <h4 style="margin:0 0 8px 0" class="accent">Calculator Tutorial</h4>
+              <div class="muted" id="calcTutorial">Use <em>Math</em> functions like Math.sin, Math.cos, Math.pow and Math.sqrt. For degrees convert to radians: deg*Math.PI/180.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CREATORS (original) -->
+        <div class="card" id="creatorsSection" style="margin-top:14px;display:none">
+          <h2>Creators</h2>
+          <div class="muted">Meet the young creators behind this project.</div>
+          <div style="display:flex;gap:12px;margin-top:12px">
+            <div class="creator-card">
+              <img class="creator-photo" src="" alt="Haswanth"/>
+              <div>
+                <div style="font-weight:700">Haswanth Kuduva</div>
+                <div class="muted">Grade 9 — Lead Developer & Designer</div>
+                <div style="margin-top:8px" class="muted">"I love building interfaces that are friendly and helpful for everyone."</div>
+              </div>
+            </div>
+            <div class="creator-card">
+              <img class="creator-photo" src="" alt="Tarakesh"/>
+              <div>
+                <div style="font-weight:700">Tarakesh</div>
+                <div class="muted">Grade 9 — Features & QA</div>
+                <div style="margin-top:8px" class="muted">"I focus on testing, small details and making things reliable."</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROFILE (original) -->
+        <div class="card" id="profileSection" style="margin-top:14px;display:none">
+          <h2>Profile</h2>
+          <div style="display:flex;gap:12px;align-items:center;margin-top:12px">
+            <img id="profilePhoto" class="profile-photo" src="" alt="photo"/>
+            <div style="flex:1">
+              <input id="profileName" placeholder="Display name" style="margin-bottom:8px" />
+              <input id="profilePassword" placeholder="New password" type="password" />
+              <div style="margin-top:8px;display:flex;gap:8px"><input id="profilePhotoInput" type="file" accept="image/*"/><button id="saveProfile">Save</button></div>
+            </div>
+          </div>
+          <div style="margin-top:12px"><h4>Account history</h4><div id="profileHistory" style="max-height:120px;overflow:auto" class="muted"></div></div>
+        </div>
+
+        <!-- SETTINGS (updated) -->
+        <div class="card" id="settingsSection" style="margin-top:14px;display:none">
+          <h2>Settings</h2>
+          <div class="muted">Notification, theme and privacy options.</div>
+          <div style="margin-top:12px;display:flex;flex-direction:column;gap:10px">
+            <label class="small">Enable desktop notifications <input id="toggleNotify" type="checkbox" style="margin-left:8px" checked/></label>
+            <label class="small">Play repeating alarm until dismissed <input id="toggleRepeat" type="checkbox" style="margin-left:8px" checked/></label>
+            <label class="small">Reminder volume <input id="reminderVolume" type="range" min="0" max="1" step="0.01" value="0.9"/></label>
+            <label class="small">Light theme style <select id="themeSelect"><option value="dark">Dark</option><option value="light">Light (pastel)</option></select></label>
+
+            <label class="small">Alarm sound <select id="alarmSelect">
+              <option value="soft">Soft Chime</option>
+              <option value="digital">Digital Beep</option>
+              <option value="bell">Bell Ring</option>
+              <option value="nature">Nature Tone</option>
+              <option value="vibrant">Vibrant Ping</option>
+            </select></label>
+
+            <div style="display:flex;gap:8px">
+              <button id="testNotify" class="btn-ghost">Test Notification</button>
+              <button id="saveSettings" class="btn-ghost">Save Settings</button>
+              <button id="deleteAllHistory" class="btn-ghost" style="background:transparent;border:1px solid rgba(255,0,0,0.2);color:#ff9aa2">Delete All History</button>
+            </div>
+            <div class="muted small">Delete All History clears reminders, events, notes, moods, and fitness logs (accounts remain).</div>
+          </div>
+        </div>
+
+        <!-- NEW: Calendar (tab) -->
+        <div class="card" id="calendarSection" style="margin-top:14px;display:none">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <h2>Calendar & Events</h2>
+            <div style="display:flex;gap:8px;align-items:center">
+              <button id="prevMonth" class="btn-ghost">◀</button>
+              <div id="monthLabel" class="muted mini"></div>
+              <button id="nextMonth" class="btn-ghost">▶</button>
+              <button id="createEventBtn">+ New Event</button>
+            </div>
+          </div>
+          <div class="calendar" style="margin-top:12px">
+            <div class="month-head mini">Sun Mon Tue Wed Thu Fri Sat</div>
+            <div id="monthGrid" class="month-grid"></div>
+            <div style="margin-top:12px" class="muted">Tip: click a day to add an event. Events will notify when their time arrives.</div>
+          </div>
+        </div>
+
+        <!-- NEW: Fitness (tab) -->
+        <div class="card" id="fitnessSection" style="margin-top:14px;display:none">
+          <h2>Fitness Tracker</h2>
+          <div class="muted">Track steps, workouts and weekly goals.</div>
+          <div style="display:flex;gap:12px;margin-top:12px;align-items:center">
+            <div style="flex:1">
+              <div class="fitness-stats">
+                <div style="flex:1">
+                  <div class="mini">Today's steps</div>
+                  <div style="display:flex;gap:12px;align-items:center;margin-top:6px">
+                    <div style="flex:1"><div class="progress"><i id="stepsBar"></i></div></div>
+                    <div style="min-width:80px;font-weight:700" id="stepsCount">0</div>
+                  </div>
+                </div>
+                <div style="width:220px">
+                  <div class="mini">Add activity</div>
+                  <div style="display:flex;gap:8px;margin-top:6px">
+                    <input id="activityType" placeholder="Walk/Run/Workout" />
+                    <input id="activityCount" placeholder="steps/mins" />
+                    <button id="addActivityBtn">Add</button>
+                  </div>
+                </div>
+              </div>
+              <div style="margin-top:12px">
+                <h4 class="mini">Recent activities</h4>
+                <div id="activityList" style="max-height:160px;overflow:auto;margin-top:8px"></div>
+              </div>
+            </div>
+            <div style="width:260px;padding:10px;border-radius:10px">
+              <h4 class="accent" style="margin-bottom:8px">Weekly Goal</h4>
+              <div class="muted">Set a weekly steps goal to watch progress across days.</div>
+              <div style="margin-top:8px;display:flex;gap:8px">
+                <input id="weeklyGoal" type="number" placeholder="e.g. 35000" />
+                <button id="setWeeklyGoal">Set</button>
+              </div>
+              <div style="margin-top:12px" id="weeklySummary" class="muted">No goal set</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- NEW: Mood (tab) -->
+        <div class="card" id="moodSection" style="margin-top:14px;display:none">
+          <h2>Mood Journal</h2>
+          <div class="muted">Quick daily mood logs — emoji + short note.</div>
+          <div style="margin-top:12px;display:flex;gap:12px;align-items:center">
+            <div class="mood-grid" id="moodBtns">
+              <div class="mood-btn" data-emoji="😄">😄 Happy</div>
+              <div class="mood-btn" data-emoji="🙂">🙂 Fine</div>
+              <div class="mood-btn" data-emoji="😐">😐 Neutral</div>
+              <div class="mood-btn" data-emoji="😔">😔 Sad</div>
+              <div class="mood-btn" data-emoji="😡">😡 Angry</div>
+            </div>
+            <div style="flex:1">
+              <input id="moodNote" placeholder="Short note (optional)" />
+              <div style="margin-top:8px;display:flex;gap:8px"><button id="saveMoodBtn">Save Mood</button><button id="viewMoodHistory" class="btn-ghost">View History</button></div>
+              <div style="margin-top:12px" id="todayMood" class="muted">No mood logged today</div>
+            </div>
+          </div>
+          <div id="moodHistory" style="margin-top:12px;display:none"></div>
+        </div>
+
+        <!-- NEW: Notes (tab) -->
+        <div class="card" id="notesSection" style="margin-top:14px;display:none">
+          <h2>Notes</h2>
+          <div class="muted">Quick notes — autosaved locally.</div>
+          <div style="display:flex;gap:12px;margin-top:12px">
+            <div style="flex:1">
+              <input id="noteTitle" placeholder="Title" />
+              <textarea id="noteBody" placeholder="Type note..." style="width:100%;height:120px;margin-top:8px;border-radius:8px"></textarea>
+              <div style="display:flex;gap:8px;margin-top:8px"><button id="saveNoteBtn">Save Note</button><button id="newNoteBtn" class="btn-ghost">New</button></div>
+            </div>
+            <div style="width:260px;padding:10px;border-radius:10px">
+              <h4 class="mini">Your Notes</h4>
+              <div id="notesList" style="margin-top:8px;max-height:240px;overflow:auto"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- NEW: Planner (tab) -->
+        <div class="card" id="plannerSection" style="margin-top:14px;display:none">
+          <h2>Daily Planner</h2>
+          <div class="muted">Today's timeline combining Tasks, Events, Meds, Water reminders and activities.</div>
+          <div style="margin-top:12px" id="plannerDate" class="mini"></div>
+          <div class="planner-timeline" id="plannerTimeline" style="margin-top:12px"></div>
+          <div style="margin-top:12px;display:flex;gap:8px"><button id="refreshPlanner" class="btn-ghost">Refresh</button><button id="exportPlanner" class="btn-ghost">Export (txt)</button></div>
+        </div>
+
+      </div>
+
+      <aside style="min-height:200px">
+        <div class="card">
+          <h3>Shortcuts & Tips</h3>
+          <div class="muted">Helpful quick links.</div>
+          <div style="margin-top:8px;" id="sideTips">
+            <div class="muted">Tip: Click calendar days to create events.</div>
+            <div class="muted" style="margin-top:6px">Tip: Use Planner export before backups.</div>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+</div>
+
+<!-- auth modal kept -->
+<div id="authModal" class="modal-backdrop" style="display:none" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="left">
+      <h2 style="margin-top:0">Welcome to AI ASSISTANT</h2>
+      <p class="muted">Create an account to persist reminders on this browser.</p>
+      <div style="margin-top:12px">
+        <label class="small">Email</label>
+        <input id="authEmail" type="email" placeholder="you@example.com" />
+        <label class="small" style="margin-top:8px">Password</label>
+        <input id="authPass" type="password" placeholder="Choose a strong password" />
+        <div style="margin-top:10px;display:flex;gap:8px"><button id="registerBtn">Create account</button><button id="loginBtn" class="btn-ghost">Log in</button><button id="guestBtn" class="btn-ghost">Continue as Guest</button></div>
+      </div>
+    </div>
+    <div class="right">
+      <h3 style="margin-top:0">Why create an account?</h3>
+      <ul class="muted">
+        <li>Save reminders locally across visits</li>
+        <li>Receive louder reminder sound & push notifications</li>
+        <li>Use multiple features offline</li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div id="reminderModalContainer"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+
+  // Shortcuts
+  const $ = id => document.getElementById(id);
+  const UID = ()=> 'u-'+Math.random().toString(36).slice(2,9);
+  const STORAGE_KEY = 'ai_assistant_final_v1.0';
+
+  // Load state or defaults
+  let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+  if(!state.users) state.users = {};
+  if(!state.currentUser) state.currentUser = null;
+  if(!state.reminders) state.reminders = [];
+  if(!state.meds) state.meds = [];
+  if(!state.water) state.water = {dailyLitres:0, plan:[]};
+  if(!state.events) state.events = [];
+  if(!state.fitness) state.fitness = {todaySteps:0, activities:[], weeklyGoal:0};
+  if(!state.moods) state.moods = [];
+  if(!state.notes) state.notes = [];
+  if(!state.settings) state.settings = {alarm: 'soft'}; // default alarm preference
+
+  // scheduled map
+  const scheduled = new Map();
+  let alarmInterval = null;
+
+  /* ----------------- Dynamic clock logo ----------------- */
+  const canvas = $('clockCanvas');
+  const ctx = canvas.getContext('2d');
+  function drawClock(){
+    const now = new Date();
+    ctx.clearRect(0,0,44,44);
+    // background circle
+    ctx.beginPath();
+    ctx.fillStyle = 'rgba(255,255,255,0.06)';
+    ctx.arc(22,22,20,0,Math.PI*2);
+    ctx.fill();
+    // hands
+    const h = now.getHours()%12 + now.getMinutes()/60;
+    const m = now.getMinutes() + now.getSeconds()/60;
+    const s = now.getSeconds();
+    function drawHand(angle, length, width, color){
+      ctx.beginPath();
+      ctx.lineWidth = width;
+      ctx.strokeStyle = color;
+      ctx.lineCap = 'round';
+      ctx.moveTo(22,22);
+      ctx.lineTo(22 + Math.cos(angle)*length, 22 + Math.sin(angle)*length);
+      ctx.stroke();
+    }
+    // hour
+    drawHand((h/12)*Math.PI*2 - Math.PI/2, 8, 2.5, '#fff');
+    // minute
+    drawHand((m/60)*Math.PI*2 - Math.PI/2, 12, 2, '#fff');
+    // second
+    drawHand((s/60)*Math.PI*2 - Math.PI/2, 14, 1, 'rgba(255,200,200,0.9)');
+    // tiny center
+    ctx.beginPath(); ctx.fillStyle='#fff'; ctx.arc(22,22,2,0,Math.PI*2); ctx.fill();
+  }
+  setInterval(drawClock, 1000);
+  drawClock();
+
+  /* ----------------- Sound engine (5 offline sounds using oscillator patterns) ----------------- */
+  function playSound(type='soft', volume=0.9){
+    try{
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if(!Ctx) return;
+      const ctx = new Ctx();
+      const now = ctx.currentTime;
+      const gain = ctx.createGain();
+      gain.gain.value = volume;
+      gain.connect(ctx.destination);
+
+      if(type === 'soft'){
+        // soft chime: sine slide
+        const o = ctx.createOscillator(); o.type='sine'; o.frequency.setValueAtTime(880, now); o.connect(gain);
+        o.frequency.exponentialRampToValueAtTime(440, now + 0.45);
+        o.start(now); o.stop(now + 0.6);
+      } else if(type === 'digital'){
+        // digital beep: two quick square beeps
+        const o = ctx.createOscillator(); o.type='square'; o.frequency.setValueAtTime(1200, now);
+        o.connect(gain);
+        o.start(now); o.stop(now + 0.12);
+        const o2 = ctx.createOscillator(); o2.type='square'; o2.frequency.setValueAtTime(1500, now + 0.18);
+        o2.connect(gain); o2.start(now + 0.18); o2.stop(now + 0.32);
+      } else if(type === 'bell'){
+        // bell ring: sine with overtones
+        const o1 = ctx.createOscillator(); o1.type='sine'; o1.frequency.setValueAtTime(880, now);
+        const o2 = ctx.createOscillator(); o2.type='sine'; o2.frequency.setValueAtTime(1320, now);
+        o1.connect(gain); o2.connect(gain);
+        gain.gain.setValueAtTime(volume, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.8);
+        o1.start(now); o2.start(now); o1.stop(now + 1.8); o2.stop(now + 1.8);
+      } else if(type === 'nature'){
+        // nature tone: gentle triangle arpeggio
+        const o1 = ctx.createOscillator(); o1.type='triangle'; o1.frequency.setValueAtTime(520, now);
+        const o2 = ctx.createOscillator(); o2.type='triangle'; o2.frequency.setValueAtTime(660, now + 0.18);
+        o1.connect(gain); o2.connect(gain);
+        o1.start(now); o1.stop(now + 0.56);
+        o2.start(now + 0.18); o2.stop(now + 0.8);
+      } else if(type === 'vibrant'){
+        // vibrant ping: fast sawtooth ping
+        const o = ctx.createOscillator(); o.type='sawtooth'; o.frequency.setValueAtTime(1600, now);
+        o.connect(gain);
+        gain.gain.setValueAtTime(volume, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
+        o.start(now); o.stop(now + 0.32);
+      }
+      // close context after a little time (best-effort)
+      setTimeout(()=>{ try{ ctx.close(); }catch(e){} }, 2500);
+    }catch(e){ console.error('playSound error', e); }
+  }
+
+  /* -------------- Save / Load -------------- */
+  function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+  function clearAllDataKeepUsers(){
+    // clear everything except users and currentUser - but per guest requirement, guest should delete everything
+    state.reminders = [];
+    state.meds = [];
+    state.water = {dailyLitres:0, plan:[]};
+    state.events = [];
+    state.fitness = {todaySteps:0, activities:[], weeklyGoal:0};
+    state.moods = [];
+    state.notes = [];
+    saveState();
+    // unschedule timeouts
+    scheduled.forEach((v,k)=>{ clearTimeout(v); });
+    scheduled.clear();
+  }
+
+  /* -------------- Scheduling engine (unchanged logic but uses playSound) -------------- */
+  const scheduledMap = scheduled; // alias
+
+  function scheduleItem(item){
+    if(!item || !item.id) item.id = UID();
+    if(scheduledMap.has(item.id)){ clearTimeout(scheduledMap.get(item.id)); scheduledMap.delete(item.id); }
+    const when = new Date(item.when).getTime();
+    if(isNaN(when)) return;
+    const now = Date.now();
+    const delay = when - now;
+    if(delay <= 0) return;
+    const tid = setTimeout(()=>{
+      // notification
+      try{
+        // play chosen sound
+        const soundChoice = (state.settings && state.settings.alarm) ? state.settings.alarm : 'soft';
+        const vol = parseFloat($('reminderVolume')?.value || 0.9);
+        playSound(soundChoice, vol);
+        // desktop notifications if enabled
+        if($('toggleNotify') && $('toggleNotify').checked && 'Notification' in window){
+          if(Notification.permission === 'granted') new Notification(item.title, {body: item.note || ''});
+          else if(Notification.permission !== 'denied') Notification.requestPermission().then(p=>{ if(p === 'granted') new Notification(item.title, {body:item.note||''}); });
+        }
+        item.fired = true; saveState(); renderAll();
+        // show modal
+        showReminderModal(item);
+      }catch(e){ console.error('trigger error', e); }
+    }, delay);
+    scheduledMap.set(item.id, tid);
+  }
+  function unschedule(id){
+    if(scheduledMap.has(id)){ clearTimeout(scheduledMap.get(id)); scheduledMap.delete(id); }
+  }
+  function loadSchedules(){
+    // clear first
+    scheduledMap.forEach((v,k)=>{ clearTimeout(v); });
+    scheduledMap.clear();
+    (state.reminders||[]).forEach(r=>{ if(!r.fired) scheduleItem(r); });
+  }
+
+  /* -------------- UI: showSection & tabs (keeps your original showSection mapping) -------------- */
+  function showSection(id){
+    document.querySelectorAll('#mainColumn > .card').forEach(c => c.style.display = 'none');
+    const sel = {
+      dashboard:'dashboardSection',
+      tasks:'tasksSection',
+      water:'waterSection',
+      meds:'medsSection',
+      calc:'calcSection',
+      tutorials:'creatorsSection',
+      creators:'creatorsSection',
+      profile:'profileSection',
+      settings:'settingsSection',
+      calendar:'calendarSection',
+      fitness:'fitnessSection',
+      mood:'moodSection',
+      notes:'notesSection',
+      planner:'plannerSection'
+    }[id] || 'dashboardSection';
+    const el = document.getElementById(sel);
+    if(el) el.style.display = 'block';
+    const link = document.querySelector('#sidebarNav a[data-target="'+id+'"]');
+    if(link){
+      document.querySelectorAll('#sidebarNav a').forEach(a=>a.classList.remove('active'));
+      link.classList.add('active');
+    }
+    $('pageTitle').innerText = link ? link.innerText : id;
+  }
+
+  function activateTab(tab){
+    document.querySelectorAll('.tab').forEach(t=>{
+      t.classList.toggle('active', t.dataset.tab === tab);
+    });
+    // hide all tab sections and show only selected
+    const tabMap = {calendar:'calendarSection', fitness:'fitnessSection', mood:'moodSection', notes:'notesSection', planner:'plannerSection'};
+    Object.values(tabMap).forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
+    const selId = tabMap[tab];
+    if(selId) document.getElementById(selId).style.display = 'block';
+    // also mark sidebar active
+    document.querySelectorAll('#sidebarNav a').forEach(a=>a.classList.remove('active'));
+    const side = document.querySelector('#sidebarNav a[data-target="'+tab+'"]');
+    if(side) side.classList.add('active');
+    $('pageTitle').innerText = document.querySelector('.tab.active') ? document.querySelector('.tab.active').innerText : 'Dashboard';
+  }
+
+  // attach sidebar behavior (keep original)
+  document.querySelectorAll('#sidebarNav a').forEach(a=>{
+    a.addEventListener('click', ()=>{
+      document.querySelectorAll('#sidebarNav a').forEach(x=>x.classList.remove('active'));
+      a.classList.add('active');
+      a.classList.add('blink-highlight');
+      setTimeout(()=>a.classList.remove('blink-highlight'),900);
+      const target = a.dataset.target;
+      showSection(target);
+      if(target === 'profile'){ openProfileEditor(); }
+    });
+  });
+  // tabs click
+  document.querySelectorAll('.tab').forEach(t=> t.addEventListener('click', ()=> activateTab(t.dataset.tab) ));
+
+  /* -------------- Motivation panel -------------- */
+  const quotes = [
+    {q:"Small progress is still progress. Keep going.", a:"— Anonymous"},
+    {q:"Learn something new today; your future self will thank you.", a:"— You"},
+    {q:"Focus on what you can control. Let the rest go.", a:"— Stoic Tip"},
+    {q:"Consistency compounds. A little each day adds up.", a:"— Habit Coach"},
+    {q:"You are closer than you think — take the next step.", a:"— Motivator"}
+  ];
+  function showRandomQuote(){
+    const r = quotes[Math.floor(Math.random()*quotes.length)];
+    $('motivationText').innerText = r.q;
+    $('motivationAuthor').innerText = r.a;
+  }
+  $('nextMotivation').addEventListener('click', showRandomQuote);
+  showRandomQuote();
+
+  /* -------------- Tutorials content (preloaded) -------------- */
+  function openTutorialsPage(){
+    const content = `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tutorials — AI Assistant</title><style>body{font-family:Inter,Arial;background:linear-gradient(180deg,#071026 0%,#07162a 60%);color:#e6eef8;padding:18px}h1{margin-bottom:6px}section{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:18px;border-radius:12px;margin-bottom:12px}ul{color:#cbd5e1}</style></head><body><h1>Tutorials — Step by step</h1><p style="color:#aab8d6">Practical guides and examples to use your assistant.</p>` +
+    '<section><h2>Reminders</h2><p>Open Tasks → enter Title & Date/Time → Add. Allow notifications when asked. When reminder fires, a modal appears with Dismiss or Snooze (10 minutes).</p></section>' +
+    '<section><h2>Calendar</h2><p>Use Calendar tab: click any day to create an event (choose time). Events appear in Calendar and will notify at the chosen time.</p></section>' +
+    '<section><h2>Water Tracker</h2><p>Set litres/day; assistant divides into reminders between 08:00 and 22:00. Use daily reminders to stay hydrated.</p></section>' +
+    '<section><h2>Medication</h2><p>Add medicine name, dose and exact Date/Time. Meds are treated like reminders and will notify you promptly.</p></section>' +
+    '<section><h2>Fitness & Planner</h2><p>Log activities in Fitness tab (steps/mins). Planner aggregates today\'s items from Reminders, Events, Meds and Fitness activities.</p></section>' +
+    '<section><h2>Notes & Mood</h2><p>Notes are saved locally. Mood journal stores one mood entry per day with a short note.</p></section>' +
+    '<p><a href="#" onclick="window.close();return false;">Close</a></p></body></html>';
+    const blob = new Blob([content], {type:'text/html'});
+    const url = URL.createObjectURL(blob);
+    window.open(url,'_blank');
+  }
+  $('openTutorials').addEventListener('click', openTutorialsPage);
+
+  /* -------------- Tasks / Meds / Water (same logic) -------------- */
+  function addTask(obj){
+    obj.id = obj.id || UID();
+    obj.fired = false;
+    state.reminders.push(obj);
+    saveState();
+    scheduleItem(obj);
+    renderAll();
+  }
+  function renderTasks(){
+    const tbody = $('tasksTable'); if(!tbody) return;
+    tbody.innerHTML = '';
+    const list = (state.reminders||[]).slice().sort((a,b)=>new Date(a.when)-new Date(b.when));
+    list.forEach(r=>{
+      const tr = document.createElement('tr');
+      const whenText = isNaN(new Date(r.when))?'-': new Date(r.when).toLocaleString();
+      tr.innerHTML = `<td>${r.title}</td><td>${whenText}</td><td>${r.type||''}</td><td><button data-id="${r.id}" class="btn-ghost">Delete</button></td>`;
+      tbody.appendChild(tr);
+    });
+    tbody.querySelectorAll('button').forEach(b=>b.addEventListener('click', e=>{
+      const id = e.target.dataset.id;
+      state.reminders = (state.reminders||[]).filter(x=>x.id!==id);
+      state.meds = (state.meds||[]).filter(x=>x.id!==id);
+      state.events = (state.events||[]).filter(x=>x.id!==id);
+      unschedule(id); saveState(); renderAll();
+    }));
+  }
+
+  function addMed(name,dose,when){
+    const m = { id: UID(), title: name, note: dose, when, type: 'Medication', fired:false };
+    state.meds.push(m); state.reminders.push(m); saveState(); scheduleItem(m); renderAll();
+  }
+  function renderMeds(){
+    const tbody = $('medTable'); if(!tbody) return;
+    tbody.innerHTML = '';
+    (state.meds||[]).slice().sort((a,b)=>new Date(a.when)-new Date(b.when)).forEach(m=>{
+      const tr = document.createElement('tr');
+      const whenText = isNaN(new Date(m.when))?'-': new Date(m.when).toLocaleString();
+      tr.innerHTML = `<td>${m.title}</td><td>${m.note}</td><td>${whenText}</td><td><button data-id="${m.id}" class="btn-ghost">Delete</button></td>`;
+      tbody.appendChild(tr);
+    });
+    tbody.querySelectorAll('button').forEach(b=>b.addEventListener('click', e=>{ const id=e.target.dataset.id; state.meds = (state.meds||[]).filter(x=>x.id!==id); state.reminders = (state.reminders||[]).filter(x=>x.id!==id); unschedule(id); saveState(); renderAll(); }));
+  }
+
+  function setWaterGoal(litres){
+    if(!(litres>0)) return;
+    state.water.dailyLitres = litres; state.water.plan = [];
+    // remove previous water reminders
+    state.reminders = (state.reminders||[]).filter(r=>r.type !== 'Water');
+    const start = new Date(); start.setHours(8,0,0,0);
+    const end = new Date(); end.setHours(22,0,0,0);
+    const slots = Math.min(12, Math.max(4, Math.round(litres*4)));
+    const step = (end.getTime()-start.getTime())/slots;
+    for(let i=0;i<slots;i++){
+      const t = new Date(start.getTime() + step*(i+0.5));
+      const amount = +(litres/slots).toFixed(2);
+      const rem = { id: UID(), title:'Drink water', when: t.toISOString(), note: amount+' L', type:'Water', fired:false };
+      state.water.plan.push({when:rem.when, amount});
+      state.reminders.push(rem);
+      scheduleItem(rem);
+    }
+    saveState(); renderAll();
+  }
+  function renderWater(){
+    const el = $('waterPlan'); if(!el) return;
+    if(!state.water || !state.water.dailyLitres){ el.innerHTML = '<div class="muted">No goal set</div>'; $('waterSummary').innerText='—'; return; }
+    let html = `<div class="small">Goal: ${state.water.dailyLitres} L — plan:</div><table><thead><tr><th>When</th><th>Amount</th></tr></thead><tbody>`;
+    state.water.plan.forEach(p=> html+=`<tr><td>${new Date(p.when).toLocaleTimeString()}</td><td>${p.amount} L</td></tr>`);
+    html += '</tbody></table>';
+    el.innerHTML = html;
+    const remaining = state.water.plan.filter(p=> new Date(p.when) > new Date()).length;
+    $('waterSummary').innerText = `${state.water.dailyLitres} L · ${remaining} left today`;
+  }
+
+  /* -------------- Calendar & Events (kept improved) -------------- */
+  let calDate = new Date();
+  function startOfMonth(d){ return new Date(d.getFullYear(), d.getMonth(), 1); }
+  function endOfMonth(d){ return new Date(d.getFullYear(), d.getMonth()+1, 0); }
+
+  function renderCalendar(){
+    const grid = $('monthGrid'); if(!grid) return;
+    grid.innerHTML = '';
+    const monthStart = startOfMonth(calDate);
+    const monthEnd = endOfMonth(calDate);
+    const startDay = monthStart.getDay();
+    const totalDays = monthEnd.getDate();
+    $('monthLabel').innerText = monthStart.toLocaleString(undefined,{month:'long', year:'numeric'});
+    for(let i=0;i<startDay;i++){ const b = document.createElement('div'); b.className='day'; b.style.opacity='0.25'; grid.appendChild(b); }
+    for(let d=1; d<=totalDays; d++){
+      const dt = new Date(monthStart.getFullYear(), monthStart.getMonth(), d);
+      const dayEl = document.createElement('div'); dayEl.className='day'; dayEl.innerHTML = `<div class="dateNum">${d}</div>`;
+      const dayISO = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate()).toISOString().slice(0,10);
+      const evs = (state.events || []).filter(e=> (new Date(e.when)).toISOString().slice(0,10) === dayISO);
+      evs.slice(0,3).forEach(e=>{
+        const pill = document.createElement('span'); pill.className='event-pill'; pill.innerText = `${new Date(e.when).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})} ${e.title}`;
+        pill.addEventListener('click', (ev)=>{ ev.stopPropagation(); openEventEditor(e); });
+        dayEl.appendChild(pill);
+      });
+      dayEl.addEventListener('click', ()=>{ const defaultWhen = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), new Date().getHours(), 0,0).toISOString(); openEventEditor({when:defaultWhen, title:'', note:''}, true); });
+      grid.appendChild(dayEl);
+    }
+  }
+  $('prevMonth').addEventListener('click', ()=>{ calDate = new Date(calDate.getFullYear(), calDate.getMonth()-1, 1); renderCalendar(); });
+  $('nextMonth').addEventListener('click', ()=>{ calDate = new Date(calDate.getFullYear(), calDate.getMonth()+1, 1); renderCalendar(); });
+
+  function openEventEditor(eventObj, isNew=false){
+    const eid = eventObj.id || UID();
+    const wrapper = document.createElement('div');
+    wrapper.className = 'modal-backdrop'; wrapper.style.zIndex = 2000;
+    const safeTitle = (eventObj.title||'').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+    const safeNote = (eventObj.note||'').replace(/</g,'&lt;');
+    wrapper.innerHTML = `<div class="modal" role="dialog" aria-modal="true">
+      <div class="left">
+        <h2 style="margin-top:0">${isNew? 'Create event':'Edit event'}</h2>
+        <label class="small">Title</label><input id="evTitle" value="${safeTitle}" />
+        <label class="small" style="margin-top:8px">When</label><input id="evWhen" type="datetime-local" />
+        <label class="small" style="margin-top:8px">Note</label><textarea id="evNote" style="height:80px">${safeNote}</textarea>
+        <div style="margin-top:10px;display:flex;gap:8px"><button id="saveEventBtn">Save</button><button id="delEventBtn" class="btn-ghost">${isNew? 'Cancel':'Delete'}</button></div>
+      </div>
+      <div class="right"><h3 style="margin-top:0">Event details</h3><div class="muted">Events create reminders and will notify you at the specified time. Offline-first and stored locally.</div></div>
+    </div>`;
+    document.body.appendChild(wrapper);
+    const dt = new Date(eventObj.when || new Date().toISOString());
+    const yyyy = dt.getFullYear(); const mm = String(dt.getMonth()+1).padStart(2,'0'); const dd = String(dt.getDate()).padStart(2,'0');
+    const hh = String(dt.getHours()).padStart(2,'0'); const min = String(dt.getMinutes()).padStart(2,'0');
+    wrapper.querySelector('#evWhen').value = `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+    wrapper.querySelector('#saveEventBtn').addEventListener('click', ()=>{
+      const title = wrapper.querySelector('#evTitle').value.trim();
+      const when = wrapper.querySelector('#evWhen').value;
+      const note = wrapper.querySelector('#evNote').value.trim();
+      if(!title||!when){ alert('Provide title and time'); return; }
+      const ev = { id: eid, title, when, note, type: 'Event', fired:false };
+      const exists = (state.events||[]).findIndex(x=>x.id===eid);
+      if(exists>=0){
+        state.events[exists] = ev;
+        const ri = (state.reminders||[]).findIndex(r=>r.id===eid);
+        if(ri>=0) state.reminders[ri] = ev;
+      } else {
+        state.events.push(ev); state.reminders.push(ev); scheduleItem(ev);
+      }
+      saveState(); document.body.removeChild(wrapper); renderAll();
+    });
+    wrapper.querySelector('#delEventBtn').addEventListener('click', ()=>{
+      if(isNew){ document.body.removeChild(wrapper); return; }
+      if(confirm('Delete event?')){ state.events = (state.events||[]).filter(x=>x.id!==eid); state.reminders = (state.reminders||[]).filter(x=>x.id!==eid); unschedule(eid); saveState(); document.body.removeChild(wrapper); renderAll(); }
+    });
+  }
+  $('createEventBtn').addEventListener('click', ()=> openEventEditor({when:new Date().toISOString(),title:'',note:''}, true) );
+
+  /* -------------- Fitness -------------- */
+  function renderFitnessUI(){
+    const s = state.fitness.todaySteps || 0; $('stepsCount').innerText = s;
+    const weeklyGoal = state.fitness.weeklyGoal || 0;
+    const percent = weeklyGoal>0 ? Math.min(100, Math.round((s/weeklyGoal)*100)) : 0;
+    $('stepsBar').style.width = percent + '%';
+    const list = $('activityList'); list.innerHTML = '';
+    (state.fitness.activities||[]).slice().reverse().forEach(a=>{ const div = document.createElement('div'); div.style.marginBottom='8px'; div.innerHTML = `<div style="font-weight:700">${a.type}</div><div class="mini">${new Date(a.when).toLocaleString()} · ${a.count}</div>`; list.appendChild(div); });
+    $('weeklySummary').innerText = weeklyGoal ? `Goal: ${weeklyGoal} steps · Today's: ${s}` : 'No goal set';
+  }
+  $('addActivityBtn').addEventListener('click', ()=>{ const type = $('activityType').value.trim(); const count = $('activityCount').value.trim(); if(!type||!count){ alert('Enter activity and steps/mins'); return; } const a = { id: UID(), type, count, when: new Date().toISOString() }; state.fitness.activities.push(a); const n = parseInt(count)||0; if(n>0) state.fitness.todaySteps = (state.fitness.todaySteps||0) + n; $('activityType').value=''; $('activityCount').value=''; saveState(); renderFitnessUI(); renderPlanner(); });
+  $('setWeeklyGoal').addEventListener('click', ()=>{ const g = parseInt($('weeklyGoal').value)||0; state.fitness.weeklyGoal = g; saveState(); renderFitnessUI(); });
+
+  /* -------------- Mood -------------- */
+  function renderMoodUI(){ const todayISO = new Date().toISOString().slice(0,10); const t = (state.moods||[]).find(m=>m.date===todayISO); $('todayMood').innerText = t ? `${t.emoji} ${t.note? '— ' + t.note : ''} · ${new Date(t.when).toLocaleTimeString()}` : 'No mood logged today'; }
+  document.querySelectorAll('.mood-btn').forEach(btn=>{ btn.addEventListener('click', ()=>{ document.querySelectorAll('.mood-btn').forEach(b=>{ b.dataset.selected='0'; b.style.outline='';}); btn.dataset.selected='1'; btn.style.outline='2px solid rgba(124,58,237,0.5)'; }); });
+  $('saveMoodBtn').addEventListener('click', ()=>{ const sel = Array.from(document.querySelectorAll('.mood-btn')).find(b=>b.dataset.selected==='1'); if(!sel){ alert('Pick a mood'); return; } const emoji = sel.dataset.emoji; const note = $('moodNote').value.trim(); const entry = { id: UID(), date: new Date().toISOString().slice(0,10), when: new Date().toISOString(), emoji, note }; state.moods = (state.moods||[]).filter(m=>m.date !== entry.date); state.moods.push(entry); saveState(); $('moodNote').value=''; document.querySelectorAll('.mood-btn').forEach(b=>{ b.dataset.selected='0'; b.style.outline='';}); renderMoodUI(); renderPlanner(); alert('Mood saved'); });
+  $('viewMoodHistory').addEventListener('click', ()=>{ const h = $('moodHistory'); if(h.style.display==='block'){ h.style.display='none'; return; } const items = (state.moods||[]).slice().reverse().map(m=>`<div style="padding:8px;border-bottom:1px dashed rgba(255,255,255,0.03)">${m.emoji} <strong>${m.date}</strong> — ${m.note||''}</div>`).join(''); h.innerHTML = items || '<div class="muted">No moods yet</div>'; h.style.display='block'; });
+
+  /* -------------- Notes -------------- */
+  function renderNotesUI(){ const list = $('notesList'); list.innerHTML=''; (state.notes||[]).slice().reverse().forEach(n=>{ const div = document.createElement('div'); div.className='note-card'; div.style.marginBottom='8px'; div.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center"><div style="font-weight:700">${n.title||'Untitled'}</div><div style="display:flex;gap:6px"><button data-id="${n.id}" class="btn-ghost small editNote">Open</button><button data-id="${n.id}" class="btn-ghost small delNote">Del</button></div></div><div class="mini" style="margin-top:6px">${new Date(n.updated).toLocaleString()}</div>`; list.appendChild(div); }); list.querySelectorAll('.editNote').forEach(b=>b.addEventListener('click', e=>{ const id=e.target.dataset.id; const n = (state.notes||[]).find(x=>x.id===id); if(n){ $('noteTitle').value=n.title; $('noteBody').value=n.body; $('saveNoteBtn').dataset.edit = id; activateTab('notes'); showSection('notes'); } })); list.querySelectorAll('.delNote').forEach(b=>b.addEventListener('click', e=>{ const id=e.target.dataset.id; if(confirm('Delete note?')){ state.notes = (state.notes||[]).filter(x=>x.id!==id); saveState(); renderNotesUI(); } })); }
+  $('saveNoteBtn').addEventListener('click', ()=>{ const id = $('saveNoteBtn').dataset.edit; const title = $('noteTitle').value.trim(); const body = $('noteBody').value.trim(); if(id){ const n = (state.notes||[]).find(x=>x.id===id); if(n){ n.title=title; n.body=body; n.updated=new Date().toISOString(); } delete $('saveNoteBtn').dataset.edit; } else { state.notes.push({ id: UID(), title, body, updated: new Date().toISOString() }); } $('noteTitle').value=''; $('noteBody').value=''; saveState(); renderNotesUI(); renderPlanner(); });
+  $('newNoteBtn').addEventListener('click', ()=>{ $('noteTitle').value=''; $('noteBody').value=''; delete $('saveNoteBtn').dataset.edit; });
+
+  /* -------------- Planner (aggregates today's items) -------------- */
+  function renderPlanner(){ const date = new Date(); const dateISO = date.toISOString().slice(0,10); $('plannerDate').innerText = `Today — ${date.toLocaleDateString()}`; const items=[]; (state.reminders||[]).forEach(r=>{ if((new Date(r.when)).toISOString().slice(0,10) === dateISO) items.push({time:new Date(r.when), title:r.title, type:r.type||'Reminder', id:r.id}); }); (state.fitness.activities||[]).forEach(a=>{ if((new Date(a.when)).toISOString().slice(0,10)===dateISO) items.push({time:new Date(a.when), title:`${a.type} · ${a.count}`, type:'Activity', id:a.id}); }); items.sort((a,b)=>a.time - b.time); const container = $('plannerTimeline'); container.innerHTML=''; if(items.length===0) container.innerHTML='<div class="muted">No items for today</div>'; items.forEach(it=>{ const div = document.createElement('div'); div.className='timeline-item'; const timeStr = it.time.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}); div.innerHTML = `<div><div style="font-weight:700">${it.title}</div><div class="mini">${it.type}</div></div><div style="min-width:120px;display:flex;gap:8px;align-items:center"><div class="mini">${timeStr}</div><button data-id="${it.id}" class="btn-ghost small goto">Open</button></div>`; container.appendChild(div); }); container.querySelectorAll('.goto').forEach(b=>b.addEventListener('click', e=>{ const id = e.target.dataset.id; const ev = (state.events||[]).find(x=>x.id===id); if(ev){ openEventEditor(ev,false); return; } const task = (state.reminders||[]).find(x=>x.id===id); if(task) alert('Reminder: ' + task.title); })); }
+  $('refreshPlanner').addEventListener('click', ()=> renderPlanner());
+  $('exportPlanner').addEventListener('click', ()=>{ const txt = Array.from($('plannerTimeline').children).map(ch=>ch.innerText).join('\n\n'); const blob = new Blob([txt||'No items'],{type:'text/plain'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `planner-${new Date().toISOString().slice(0,10)}.txt`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); });
+
+  /* -------------- Reminder modal -------------- */
+  function showReminderModal(item){
+    const container = $('reminderModalContainer'); container.innerHTML = `<div class="reminder-modal" role="dialog"><h3>${item.title}</h3><div class="muted" style="margin-bottom:12px">${item.note||''}</div><div style="display:flex;gap:8px;justify-content:flex-end"><button id="dismissReminder" class="btn-ghost">Dismiss</button><button id="snoozeReminder" class="btn-ghost">Snooze 10m</button></div></div>`;
+    $('dismissReminder').addEventListener('click', ()=>{ container.innerHTML=''; item.fired=true; saveState(); renderAll(); });
+    $('snoozeReminder').addEventListener('click', ()=>{ container.innerHTML=''; const n = new Date(Date.now()+10*60*1000).toISOString(); item.when = n; item.fired=false; saveState(); scheduleItem(item); renderAll(); });
+  }
+
+  /* -------------- Render all UI -------------- */
+  function renderAll(){
+    const p = state.currentUser && state.users[state.currentUser];
+    $('menuUser').innerText = p ? (p.name || p.email) : 'Guest';
+    const src = p && p.avatar ? p.avatar : '';
+    $('topProfilePhoto').src = src; $('profilePhoto').src = src;
+    renderTasks(); renderMeds(); renderWater(); renderCalendar(); renderFitnessUI(); renderMoodUI(); renderNotesUI(); renderPlanner();
+    const pending = (state.reminders||[]).filter(r=>!r.fired && new Date(r.when) > new Date()).sort((a,b)=>new Date(a.when)-new Date(b.when));
+    $('nextReminder').innerText = pending.length ? (pending[0].title + ' — ' + (isNaN(new Date(pending[0].when))?'-':new Date(pending[0].when).toLocaleString())) : '—';
+    $('overviewInfo').innerText = pending.length ? `You have ${pending.length} upcoming reminders` : 'No reminders for now — create tasks, water goals, or meds and we\'ll remind you loudly when the time comes.';
+  }
+
+  /* -------------- Existing controls wiring -------------- */
+  $('showAddMed').addEventListener('click', ()=>{ showSection('meds'); $('medName').focus(); });
+  $('showAddTask').addEventListener('click', ()=>{ showSection('tasks'); $('taskTitle').focus(); });
+  $('showWaterGoal').addEventListener('click', ()=>{ showSection('water'); $('dailyLitres').focus(); });
+
+  $('addTaskBtn').addEventListener('click', ()=>{ const title = $('taskTitle').value.trim(); const when = $('taskWhen').value; const type = $('taskType').value; if(!title||!when){ alert('Please provide title and date/time'); return; } addTask({title,when,type,note:''}); $('taskTitle').value=''; $('taskWhen').value=''; });
+
+  $('addMedBtn').addEventListener('click', ()=>{ const name = $('medName').value.trim(); const dose = $('medDose').value.trim(); const when = $('medDateTime').value; if(!name||!dose||!when){ alert('Complete all medication fields'); return; } addMed(name,dose,when); $('medName').value=''; $('medDose').value=''; $('medDateTime').value=''; });
+
+  $('setWaterGoal').addEventListener('click', ()=>{ const litres = parseFloat($('dailyLitres').value); if(!(litres>0)){ alert('Enter a number > 0'); return; } setWaterGoal(litres); });
+
+  $('quickCalcBtn').addEventListener('click', ()=>{ const expr = $('quickCalcInput').value.trim(); if(!expr) return; try{ const res = Function('return ('+expr+')')(); $('quickCalcResult').innerText = res; }catch(e){ $('quickCalcResult').innerText = 'Error'; } });
+
+  $('evalBtn').addEventListener('click', ()=>{ try{ const r = Function('with(Math){ return '+$('fullExpr').value+' }')(); $('fullRes').innerText = r; }catch(e){ $('fullRes').innerText = 'Error: '+e.message; } });
+  $('helpCalc').addEventListener('click', ()=>{ alert('Use Math functions: Math.sin, Math.cos, Math.pow, Math.sqrt. Convert degrees to radians: deg*Math.PI/180'); });
+
+  // Auth & Profile
+  $('registerBtn').addEventListener('click', ()=>{ const email = $('authEmail').value.trim().toLowerCase(); const pass = $('authPass').value; if(!email||!pass){ alert('Please provide email and password'); return; } if(state.users[email]){ alert('Account exists — use Login'); return; } state.users[email] = {email,pass,id:UID(),name:email,avatar:''}; state.currentUser = email; saveState(); document.getElementById('authModal').style.display='none'; renderAll(); });
+  $('loginBtn').addEventListener('click', ()=>{ const email = $('authEmail').value.trim().toLowerCase(); const pass = $('authPass').value; if(!email||!pass){ alert('Please provide email and password'); return; } if(state.users[email] && state.users[email].pass===pass){ state.currentUser = email; saveState(); document.getElementById('authModal').style.display='none'; renderAll(); } else { alert('Invalid credentials'); } });
+
+  // Guest: *clear all data and use guest session*
+  $('guestBtn').addEventListener('click', ()=>{ if(confirm('Continue as Guest? This will clear all local data (reminders, notes, moods, fitness, events).')){ // wipe data
+      state.currentUser = null;
+      clearAllDataKeepUsers(); // keeps users but clears app data
+      saveState();
+      document.getElementById('authModal').style.display='none';
+      renderAll();
+    } else {
+      // if cancelled, stay in modal
+    }
+  });
+
+  $('topProfilePhoto').addEventListener('click', ()=>{ $('profileMenu').classList.toggle('show'); });
+  $('openAccountBtn').addEventListener('click', ()=>{ $('profileMenu').classList.remove('show'); document.getElementById('authModal').style.display='flex'; document.getElementById('authModal').setAttribute('aria-hidden','false'); });
+  $('logoutBtn').addEventListener('click', ()=>{ state.currentUser = null; saveState(); $('profileMenu').classList.remove('show'); renderAll(); });
+
+  $('saveProfile').addEventListener('click', ()=>{ if(!state.currentUser){ alert('Please login to edit profile'); return; } const p = state.users[state.currentUser]; p.name = $('profileName').value.trim() || p.email; const pw = $('profilePassword').value; if(pw) p.pass = pw; const file = $('profilePhotoInput').files[0]; if(file){ const fr = new FileReader(); fr.onload = ()=>{ p.avatar = fr.result; saveState(); renderAll(); }; fr.readAsDataURL(file); } else { saveState(); renderAll(); } });
+
+  // Theme selection (light redesign applied via CSS)
+  $('themeSelect').addEventListener('change', e=>{ if(e.target.value === 'light'){ document.documentElement.classList.add('light-mode'); } else { document.documentElement.classList.remove('light-mode'); } });
+
+  // Alarm selection binding
+  // initialize select from state
+  if(state.settings && state.settings.alarm) $('alarmSelect').value = state.settings.alarm;
+  $('alarmSelect').addEventListener('change', ()=>{ state.settings.alarm = $('alarmSelect').value; saveState(); });
+
+  // Test notification should play selected sound
+  $('testNotify').addEventListener('click', ()=>{ const soundChoice = $('alarmSelect').value || (state.settings && state.settings.alarm) || 'soft'; const vol = parseFloat($('reminderVolume')?.value || 0.9); playSound(soundChoice, vol); const c = $('reminderModalContainer'); c.innerHTML = `<div class="reminder-modal" role="dialog"><h3>Test Notification</h3><div class="muted" style="margin-bottom:12px">Playing "${soundChoice}". Click Dismiss to stop (stop only stops repeating alarm).</div><div style="display:flex;gap:8px;justify-content:flex-end"><button id="dismissTest" class="btn-ghost">Dismiss</button></div></div>`; $('dismissTest').addEventListener('click', ()=>{ $('reminderModalContainer').innerHTML=''; }); });
+
+  $('saveSettings').addEventListener('click', ()=>{ state.settings.alarm = $('alarmSelect').value; saveState(); alert('Settings saved'); });
+
+  // Delete all history (settings)
+  $('deleteAllHistory').addEventListener('click', ()=>{ if(confirm('Delete all history? This will remove reminders, notes, moods, fitness logs, and events. This cannot be undone.')){ clearAllDataKeepUsers(); saveState(); renderAll(); alert('All history cleared'); } });
+
+  // Open calculator quick
+  $('openCalc').addEventListener('click', ()=>{ // show calculator panel and focus fullExpr
+    document.querySelectorAll('#sidebarNav a').forEach(x=>x.classList.remove('active'));
+    const el = Array.from(document.querySelectorAll('#sidebarNav a')).find(a=>a.dataset.target==='calc');
+    if(el) el.classList.add('active');
+    showSection('calc');
+    // also clear tab highlights (calc is not a main tab)
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    setTimeout(()=>{ if($('fullExpr')) $('fullExpr').focus(); }, 120);
+  });
+
+  $('openCalendarQuick').addEventListener('click', ()=>{ activateTab('calendar'); });
+  $('openNotesQuick').addEventListener('click', ()=>{ activateTab('notes'); });
+
+  // Tutorials open in new tab (kept original but now more content)
+  // already bound earlier via openTutorialsPage
+
+  /* -------------- Initialization -------------- */
+  loadSchedules();
+  renderAll();
+  showSection('dashboard');
+
+  // expose debug handles
+  window._ai_save = saveState;
+  window._ai_state = state;
+
+}); // DOMContentLoaded end
+</script>
+</body>
+</html>
